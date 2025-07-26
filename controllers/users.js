@@ -2,6 +2,8 @@ const bcrypt = require("bcryptjs");
 const Game = require("../models/games");
 const jwt = require("jsonwebtoken");
 
-const createUser = (req, res, next) => {};
+const createUser = (req, res, next) => {
+  const ({email, password, name, avatarUrl})
+};
 
 const login = (req, res, next) => {};
