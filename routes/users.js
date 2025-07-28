@@ -1,5 +1,6 @@
 const router = require("express").Router();
 const auth = require("./middleware/auth");
+const { JWT_SECRET } = require("../utils/config");
 const {
   createUser,
   login,
