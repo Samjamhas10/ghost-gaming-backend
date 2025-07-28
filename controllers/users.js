@@ -1,6 +1,7 @@
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const User = require("../models/users");
+const { JWT_SECRET } = require("../utils/config");
 const { okStatusCode, createdStatusCode } = require("../utils/statusCodes");
 
 // async function to create new user
@@ -31,9 +32,18 @@ const createUser = async (req, res, next) => {
 };
 
 const getCurrentUser = async (req, res, next) => {
-  const { email, password } = req.user._id;
+  try {
+    const user = await User.findById(req.user._id).select("-password"); // exclude password
+    if (!user) {
+      return res.status(404).send({ message: "User not found" });
+    }
+    res.status(okStatusCode).send(user);
+  } catch (err) {
+    next(err);
+  }
 };
 
+// validates credentials and returns a JWT token
 const login = async (req, res, next) => {
   try {
     const { email, password } = req.body;
@@ -43,13 +53,14 @@ const login = async (req, res, next) => {
       // if no user us found return Unauthorized
       return res.status(401).send({ message: "Invalid credentials" });
     }
-    const passwordMatches = await bcrypt.compare(password, userExists);
-    const token = jwt.sign({ _id: userExists._id }, JWT_SECRET, {
-      expiresIn: "7d",
-    });
+    const passwordMatches = await bcrypt.compare(password, userExists.password);
+
     if (!passwordMatches) {
       return res.status(401).send({ message: "Invalid credentials" });
     }
+    const token = jwt.sign({ _id: userExists._id }, JWT_SECRET, {
+      expiresIn: "7d",
+    });
     return res.status(okStatusCode).send({ token });
   } catch (err) {
     next(err);
