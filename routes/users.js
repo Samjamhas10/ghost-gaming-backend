@@ -1,15 +1,15 @@
 const router = require("express").Router();
 const auth = require("./middleware/auth");
 const {
-  signup,
-  signin,
+  createUser,
+  login,
   getCurrentUser,
   getGames,
 } = require("../controllers/users");
 
 // Routes
-router.post("/signup"); // NOT PROTECTED
-router.post("/signin"); // NOT PROTECTED
+router.post("/signup", createUser); // NOT PROTECTED
+router.post("/signin", login); // NOT PROTECTED
 
 // auth middleware
 router.use(auth);
