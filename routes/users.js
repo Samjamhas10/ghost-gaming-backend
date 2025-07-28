@@ -1,5 +1,5 @@
 const router = require("express").Router();
-const auth = require("./middleware/auth");
+const auth = require("../middlewares/auth");
 const { JWT_SECRET } = require("../utils/config");
 const {
   createUser,
@@ -15,7 +15,7 @@ router.post("/signin", login); // NOT PROTECTED
 // auth middleware
 router.use(auth);
 
-router.get("/users/me"); // PROTECTED
-router.get("/games"); //PROTECTED
+// router.get("/users/me"); // PROTECTED
+// router.get("/games"); //PROTECTED
 
 module.exports = router;

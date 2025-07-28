@@ -1,10 +1,12 @@
 const router = require("express").Router();
-const auth = require("./middleware/auth");
-const { getGames, getGamesId } = require("../controllers/users");
+const auth = require("../middlewares/auth");
+const { getGames, getGamesId } = require("../controllers/games");
 
 // auth middleware
-router.use(auth);
-router.post("/games"); // PROTECTED
-router.delete("/games/:gameId"); //PROTECTED
+// router.use(auth);
+console.log(getGames);
+router.get("/", getGames);
+// router.post("/games"); // PROTECTED
+// router.delete("/games/:gameId"); //PROTECTED
 
 module.exports = router;
