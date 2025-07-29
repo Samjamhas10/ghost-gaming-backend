@@ -1,3 +1,5 @@
+const { internalServerStatusCode } = require("../utils/statusCodes");
+
 const API_URL = "https://api.igdb.com/v4/games";
 
 const checkResponse = (res) => {
@@ -27,7 +29,15 @@ const getGames = (req, res, next) => {
     .then(checkResponse)
     .then((data) => {
       res.send(data);
+    })
+    .catch((err) => {
+      console.log(err);
+      res
+        .status(internalServerStatusCode)
+        .send({ message: "Internal server error" });
     });
 };
 
-module.exports = { getGames };
+const deleteGames = (req, res, next) => {};
+
+module.exports = { getGames, deleteGames };
