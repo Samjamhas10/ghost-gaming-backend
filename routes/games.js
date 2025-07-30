@@ -5,10 +5,9 @@ const { getGames, deleteGames, searchGames } = require("../controllers/games");
 console.log(getGames);
 router.get("/", getGames);
 
+router.get("/search", searchGames);
 // auth middleware
 router.use(auth);
-
-router.get("/search", searchGames);
 router.delete("/:gameId", deleteGames); //PROTECTED
 
 module.exports = router;
