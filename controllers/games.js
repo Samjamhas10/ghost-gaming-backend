@@ -15,7 +15,7 @@ const getGames = (req, res, next) => {
   const query = `
   fields name, summary, rating, cover.url, genres.name, platforms.name;
   where rating > 80 & rating_count > 10;
-  limit 20;`;
+  limit 8;`;
   return fetch(API_URL, {
     method: "POST",
     headers: {

@@ -15,9 +15,9 @@ const requestLogger = expressWinston.logger({
     }),
     new winston.transports.File({
       filename: "requestLogger",
-      format: winston.format.simple(),
     }),
   ],
+  format: winston.format.simple(),
 });
 
 // create an error logger
@@ -25,9 +25,9 @@ const errorLogger = expressWinston.errorLogger({
   transports: [
     new winston.transports.File({
       filename: "errorLogger",
-      format: winston.format.simple(),
     }),
   ],
+  format: winston.format.simple(),
 });
 
 module.exports = { requestLogger, errorLogger };
