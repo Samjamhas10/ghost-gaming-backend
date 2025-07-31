@@ -1,9 +1,9 @@
 const express = require("express");
-const router = require("express").Router();
+// const router = require("express").Router();
 const mongoose = require("mongoose");
 const cors = require("cors");
-const errorHandler = require("./middlewares/error-handler");
 const { errors } = require("celebrate");
+const errorHandler = require("./middlewares/error-handler");
 const { requestLogger, errorLogger } = require("./middlewares/logger");
 const indexRouter = require("./routes/index");
 
@@ -13,6 +13,7 @@ const PORT = process.env.PORT || 3004;
 // MongoDB connection
 mongoose
   .connect("mongodb://localhost:27017/ghostgame_db")
+  // eslint-disable-next-line no-console
   .then(() => console.log("Connected to DB"))
   .catch(console.error);
 
@@ -29,5 +30,6 @@ app.use(errors()); // celebrate validation errors
 app.use(errorHandler); // custom error handler
 
 app.listen(PORT, () => {
+  // eslint-disable-next-line no-console
   console.log(`Server is running on PORT 3004`);
 });
