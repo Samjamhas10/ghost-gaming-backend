@@ -2,8 +2,8 @@ const {
   internalServerStatusCode,
   okStatusCode,
 } = require("../utils/statusCodes");
-// const { BadRequestError } = require("../utils/bad-request-err");
 const Game = require("../models/games");
+const { BadRequestError } = require("../utils/errors");
 
 // base url
 const API_URL = "https://api.igdb.com/v4/games";
@@ -78,14 +78,29 @@ const searchGames = (req, res, next) => {
 // save a new game
 const saveGames = async (req, res, next) => {
   // destructure incoming request body
-  // Get the required fields from the request body
-  // like the coverImage, owner, etc
-  const { name, date, userId } = req.body;
-  //create new game instance
-  // use the required fields to create the saved game
-  //PS enable auth middleware
-  const newGame = new Game({ name, date, userId });
+  const {
+    name,
+    gameId,
+    summary,
+    releaseDate,
+    genres,
+    platforms,
+    coverImage,
+    rating,
+  } = req.body;
+  const owner = req.user._id;
   try {
+    const newGame = new Game({
+      name,
+      gameId,
+      summary,
+      releaseDate,
+      genres,
+      platforms,
+      coverImage,
+      rating,
+      owner: userId,
+    });
     const savedGame = await newGame.save();
     res.status(okStatusCode).send(savedGame);
   } catch (err) {
@@ -98,38 +113,39 @@ const saveGames = async (req, res, next) => {
 
 // users saved games
 const savedGames = async (req, res, next) => {
-  const { userId } = req.query;
-  if (!userId) {
-    return next(new BadRequestError("Invalid data"));
-  }
+  const userId = req.user._id;
   try {
+    const games = await Game.find({ owner: userId });
+    res.status(okStatusCode).send(games);
   } catch (err) {
     console.log(err);
     res
       .status(internalServerStatusCode)
       .send({ message: "Internal server error" });
   }
-  return next(err);
 };
 
 const deleteGames = async (req, res, next) => {
-  const { gameId } = req.params;
+  const { gameId } = req.params; // identifying which game to delete
   const userId = req.user._id;
-  const deletedGame = await findByIdAndDelete(gameId);
   if (!gameId) {
-    return next(new BadRequestError("Invalid data"));
+    return next(new BadRequestError("Invalid game"));
   }
   try {
+    const deletedGame = await Game.findOneAndDelete({
+      gameId: req.params.gameId,
+      owner: req.user._id,
+    });
     if (!deletedGame) {
       return res.status(404).send({ message: "Deleted game not found" });
     }
+    res.status(okStatusCode).send(deletedGame);
   } catch (err) {
     console.log(err);
     res
       .status(internalServerStatusCode)
       .send({ message: "Internal server error" });
   }
-  return next(err);
 };
 
 module.exports = { getGames, searchGames, saveGames, savedGames, deleteGames };

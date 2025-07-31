@@ -12,8 +12,9 @@ console.log(getGames);
 router.get("/", getGames);
 
 router.get("/search", searchGames);
+
 // auth middleware
-//router.use(auth);
+router.use(auth);
 
 router.post("/save", saveGames); // PROTECTED saving games to a user's collection
 router.get("/saved", savedGames); // PROTECTED retrieving a user's saved games

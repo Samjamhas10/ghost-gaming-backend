@@ -11,7 +11,7 @@ const gameSchema = new mongoose.Schema({
 
   gameId: {
     type: String,
-    required: [true, "The gameId is a required number"],
+    required: [true, "The gameId is required"],
     unique: true,
   },
 
@@ -21,8 +21,7 @@ const gameSchema = new mongoose.Schema({
   },
 
   releaseDate: {
-    type: String,
-    required: true,
+    type: Date,
   },
 
   genres: {
@@ -61,8 +60,7 @@ const gameSchema = new mongoose.Schema({
   },
 
   savedAt: {
-    name: String,
-    userId: String,
+    name: Date,
     type: Date,
   },
 });
