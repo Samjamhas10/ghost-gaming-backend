@@ -64,7 +64,6 @@ const gameSchema = new mongoose.Schema({
     name: String,
     userId: String,
     type: Date,
-    default: Date.now,
   },
 });
 

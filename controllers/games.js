@@ -1,4 +1,8 @@
-const { internalServerStatusCode } = require("../utils/statusCodes");
+const {
+  internalServerStatusCode,
+  okStatusCode,
+} = require("../utils/statusCodes");
+// const { BadRequestError } = require("../utils/bad-request-err");
 const Game = require("../models/games");
 
 // base url
@@ -35,7 +39,7 @@ const getGames = (req, res, next) => {
     })
     .catch((err) => {
       console.log(err);
-      res
+      return res
         .status(internalServerStatusCode)
         .send({ message: "Internal server error" });
     });
@@ -73,14 +77,22 @@ const searchGames = (req, res, next) => {
 
 // save a new game
 const saveGames = async (req, res, next) => {
+  // destructure incoming request body
+  // Get the required fields from the request body
+  // like the coverImage, owner, etc
   const { name, date, userId } = req.body;
+  //create new game instance
+  // use the required fields to create the saved game
+  //PS enable auth middleware
   const newGame = new Game({ name, date, userId });
-  if (!newGame) {
-    return res.status(404).send({ message: "game not found" });
-  }
   try {
+    const savedGame = await newGame.save();
+    res.status(okStatusCode).send(savedGame);
   } catch (err) {
-    next(err);
+    console.error(err);
+    res
+      .status(internalServerStatusCode)
+      .send({ message: "Internal server error" });
   }
 };
 
@@ -88,27 +100,36 @@ const saveGames = async (req, res, next) => {
 const savedGames = async (req, res, next) => {
   const { userId } = req.query;
   if (!userId) {
-    return res.status(400).send({ message: "userId is required" });
+    return next(new BadRequestError("Invalid data"));
   }
   try {
   } catch (err) {
-    next(err);
+    console.log(err);
+    res
+      .status(internalServerStatusCode)
+      .send({ message: "Internal server error" });
   }
+  return next(err);
 };
 
 const deleteGames = async (req, res, next) => {
   const { gameId } = req.params;
+  const userId = req.user._id;
   const deletedGame = await findByIdAndDelete(gameId);
   if (!gameId) {
-    return res.status(400).send({ message: "gameId is required" });
+    return next(new BadRequestError("Invalid data"));
   }
   try {
     if (!deletedGame) {
       return res.status(404).send({ message: "Deleted game not found" });
     }
   } catch (err) {
-    next(err);
+    console.log(err);
+    res
+      .status(internalServerStatusCode)
+      .send({ message: "Internal server error" });
   }
+  return next(err);
 };
 
 module.exports = { getGames, searchGames, saveGames, savedGames, deleteGames };
