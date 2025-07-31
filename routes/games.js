@@ -8,6 +8,6 @@ router.get("/", getGames);
 router.get("/search", searchGames);
 // auth middleware
 router.use(auth);
-router.delete("/:gameId", deleteGames); //PROTECTED
+router.delete("/:gameId", deleteGames); //PROTECTED deleting a user's saved games
 
 module.exports = router;

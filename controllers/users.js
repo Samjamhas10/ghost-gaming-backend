@@ -67,4 +67,8 @@ const login = async (req, res, next) => {
   }
 };
 
-module.exports = { createUser, getCurrentUser, login };
+const saveGames = (req, res, next) => {};
+
+const savedGames = (req, res, next) => {};
+
+module.exports = { createUser, getCurrentUser, login, saveGames, savedGames };
