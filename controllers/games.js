@@ -1,7 +1,10 @@
 const { internalServerStatusCode } = require("../utils/statusCodes");
+const Game = require("../models/games");
 
+// base url
 const API_URL = "https://api.igdb.com/v4/games";
 
+// helper function
 const checkResponse = (res) => {
   if (res.ok) {
     return res.json();
@@ -11,6 +14,7 @@ const checkResponse = (res) => {
   return Promise.reject(`Error: ${res.status}`);
 };
 
+// get recently played games
 const getGames = (req, res, next) => {
   const query = `
   fields name, summary, rating, cover.url, genres.name, platforms.name;
@@ -37,6 +41,7 @@ const getGames = (req, res, next) => {
     });
 };
 
+// search all games
 const searchGames = (req, res, next) => {
   const { gameTitle } = req.query;
   const query = `
@@ -66,6 +71,44 @@ const searchGames = (req, res, next) => {
     });
 };
 
-const deleteGames = (req, res, next) => {};
+// save a new game
+const saveGames = async (req, res, next) => {
+  const { name, date, userId } = req.body;
+  const newGame = new Game({ name, date, userId });
+  if (!newGame) {
+    return res.status(404).send({ message: "game not found" });
+  }
+  try {
+  } catch (err) {
+    next(err);
+  }
+};
 
-module.exports = { getGames, deleteGames, searchGames };
+// users saved games
+const savedGames = async (req, res, next) => {
+  const { userId } = req.query;
+  if (!userId) {
+    return res.status(400).send({ message: "userId is required" });
+  }
+  try {
+  } catch (err) {
+    next(err);
+  }
+};
+
+const deleteGames = async (req, res, next) => {
+  const { gameId } = req.params;
+  const deletedGame = await findByIdAndDelete(gameId);
+  if (!gameId) {
+    return res.status(400).send({ message: "gameId is required" });
+  }
+  try {
+    if (!deletedGame) {
+      return res.status(404).send({ message: "Deleted game not found" });
+    }
+  } catch (err) {
+    next(err);
+  }
+};
+
+module.exports = { getGames, searchGames, saveGames, savedGames, deleteGames };

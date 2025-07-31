@@ -59,6 +59,13 @@ const gameSchema = new mongoose.Schema({
     required: true,
     select: false,
   },
+
+  savedAt: {
+    name: String,
+    userId: String,
+    type: Date,
+    default: Date.now,
+  },
 });
 
 module.exports = mongoose.model("game", gameSchema);
