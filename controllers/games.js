@@ -13,8 +13,8 @@ const checkResponse = (res) => {
   if (res.ok) {
     return res.json();
   }
-  console.log(res);
-  res.json().then(console.log);
+  console.error(res);
+  res.json().then(console.error);
   return Promise.reject(`Error: ${res.status}`);
 };
 
@@ -38,7 +38,7 @@ const getGames = (req, res, next) => {
       res.send(data);
     })
     .catch((err) => {
-      console.log(err);
+      console.error(err);
       return res
         .status(internalServerStatusCode)
         .send({ message: "Internal server error" });
@@ -68,7 +68,7 @@ const searchGames = (req, res, next) => {
       res.send(gameTitle);
     })
     .catch((err) => {
-      console.log(err);
+      console.error(err);
       res
         .status(internalServerStatusCode)
         .send({ message: "Internal server error" });
@@ -118,7 +118,7 @@ const savedGames = async (req, res, next) => {
     const games = await Game.find({ owner: userId });
     res.status(okStatusCode).send(games);
   } catch (err) {
-    console.log(err);
+    console.error(err);
     res
       .status(internalServerStatusCode)
       .send({ message: "Internal server error" });
@@ -139,10 +139,10 @@ const deleteGames = async (req, res, next) => {
     if (!deletedGame) {
       return res.status(404).send({ message: "Deleted game not found" });
     }
-    res.status(okStatusCode).send(deletedGame);
+    return res.status(okStatusCode).send(deletedGame);
   } catch (err) {
-    console.log(err);
-    res
+    console.error(err);
+    return res
       .status(internalServerStatusCode)
       .send({ message: "Internal server error" });
   }

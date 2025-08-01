@@ -37,9 +37,9 @@ const getCurrentUser = async (req, res, next) => {
     if (!user) {
       return res.status(404).send({ message: "User not found" });
     }
-    res.status(okStatusCode).send(user);
+    return res.status(okStatusCode).send(user);
   } catch (err) {
-    next(err);
+    return next(err);
   }
 };
 
@@ -63,7 +63,7 @@ const login = async (req, res, next) => {
     });
     return res.status(okStatusCode).send({ token });
   } catch (err) {
-    next(err);
+    return next(err);
   }
 };
 
