@@ -66,6 +66,12 @@ const login = async (req, res, next) => {
   }
 };
 
-const updateProfile = async (req, res, next) => {};
+const updateProfile = async (req, res, next) => {
+  try {
+    const { username, bio, avatarUrl } = req.body;
+  } catch (err) {
+    return next(err);
+  }
+};
 
 module.exports = { createUser, getCurrentUser, login, updateProfile };
