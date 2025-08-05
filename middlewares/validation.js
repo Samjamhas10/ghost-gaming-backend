@@ -10,7 +10,12 @@ const validateUrl = (value, helpers) => {
 };
 
 // Email validator helper
-
+const validateEmail = (value, helpers) => {
+  if (validator.isEmail(value)) {
+    return value;
+  }
+  return helpers.error("string.email");
+};
 
 module.exports.validateId = celebrate({
   params: Joi.celebrate().keys({}),

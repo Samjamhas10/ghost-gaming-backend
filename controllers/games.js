@@ -99,7 +99,6 @@ const saveGames = async (req, res, next) => {
       platforms,
       coverImage,
       rating,
-      owner: userId,
     });
     const savedGame = await newGame.save();
     res.status(okStatusCode).send(savedGame);

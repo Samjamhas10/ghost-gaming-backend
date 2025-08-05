@@ -5,14 +5,14 @@ const { JWT_SECRET } = require("../utils/config");
 const auth = (req, res, next) => {
   const { authorization } = req.headers;
   if (!authorization || !authorization.startsWith("Bearer ")) {
+    console.log("No bearer token");
     const error = new UnauthorizedError("Authorization required");
     return next(error);
   }
   const token = authorization.replace("Bearer ", "");
   let payload;
   try {
-    const payload = jwt.verify(token, JWT_SECRET);
-    req.user = payload;
+    payload = jwt.verify(token, JWT_SECRET);
   } catch (err) {
     const error = new UnauthorizedError("Authorization required");
     return next(error);

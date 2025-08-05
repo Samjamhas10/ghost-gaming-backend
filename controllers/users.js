@@ -6,6 +6,7 @@ const { okStatusCode, createdStatusCode } = require("../utils/statusCodes");
 
 // async function to create new user
 const createUser = async (req, res, next) => {
+  console.log("Creating user");
   try {
     // destructure user input from req.body
     const { email, password, name, avatarUrl } = req.body;
@@ -23,9 +24,7 @@ const createUser = async (req, res, next) => {
       name,
       avatarUrl,
     });
-    return res
-      .status(createdStatusCode)
-      .send({ message: "User created successfully" });
+    return res.status(createdStatusCode).send(user);
   } catch (err) {
     return next(err);
   }
@@ -67,4 +66,6 @@ const login = async (req, res, next) => {
   }
 };
 
-module.exports = { createUser, getCurrentUser, login };
+const updateProfile = async (req, res, next) => {};
+
+module.exports = { createUser, getCurrentUser, login, updateProfile };
