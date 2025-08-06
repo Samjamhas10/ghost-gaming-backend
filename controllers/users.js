@@ -6,7 +6,6 @@ const { okStatusCode, createdStatusCode } = require("../utils/statusCodes");
 
 // async function to create new user
 const createUser = async (req, res, next) => {
-  console.log("Creating user");
   try {
     // destructure user input from req.body
     const { email, password, name, avatarUrl } = req.body;
@@ -68,7 +67,18 @@ const login = async (req, res, next) => {
 
 const updateProfile = async (req, res, next) => {
   try {
+    const userId = req.user._id;
     const { username, bio, avatarUrl } = req.body;
+    const userData = await User.findByIdAndUpdate(
+      userId,
+      {
+        username,
+        bio,
+        avatarUrl,
+      },
+      { new: true, runValidators: true }
+    ).select("-password");
+    return res.status(okStatusCode).send(userData);
   } catch (err) {
     return next(err);
   }

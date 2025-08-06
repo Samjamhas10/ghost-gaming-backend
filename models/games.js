@@ -60,7 +60,6 @@ const gameSchema = new mongoose.Schema({
   },
 
   savedAt: {
-    name: Date,
     type: Date,
   },
 });

@@ -1,6 +1,5 @@
 const router = require("express").Router();
 const auth = require("../middlewares/auth");
-const { JWT_SECRET } = require("../utils/config");
 const {
   createUser,
   getCurrentUser,
@@ -8,14 +7,20 @@ const {
   updateProfile,
 } = require("../controllers/users");
 
+const {
+  validateUserBody,
+  validateAuthentication,
+  validateUserUpdateProfile,
+} = require("../middlewares/validation");
+
 // Routes
-router.post("/signup", createUser); // NOT PROTECTED
-router.post("/signin", login); // NOT PROTECTED
+router.post("/signup", validateUserBody, createUser); // NOT PROTECTED
+router.post("/signin", validateAuthentication, login); // NOT PROTECTED
 
 // auth middleware
 router.use(auth);
 
 router.get("/me", getCurrentUser); // PROTECTED getting current user info
-router.patch("/me", updateProfile); // PROTECTED
+router.patch("/me", validateUserUpdateProfile, updateProfile); // PROTECTED
 
 module.exports = router;

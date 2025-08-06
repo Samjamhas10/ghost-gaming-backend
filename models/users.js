@@ -4,12 +4,6 @@ const validator = require("validator");
 const bcrypt = require("bcryptjs");
 
 const userSchema = new mongoose.Schema({
-  name: {
-    type: String,
-    required: true,
-    minlength: 2,
-    maxlength: 30,
-  },
   email: {
     type: String,
     required: true,
@@ -24,7 +18,31 @@ const userSchema = new mongoose.Schema({
   password: {
     type: String,
     required: true,
+    minlength: "2",
+    maxlength: "30",
     select: false, // password security
+  },
+  name: {
+    type: String,
+    required: true,
+    minlength: 2,
+    maxlength: 30,
+  },
+  avatarUrl: {
+    type: String,
+    required: true,
+    validate: {
+      validator(value) {
+        return validator.isURL(value);
+      },
+      message: "You must enter a valid URL",
+    },
+    bio: {
+      type: String,
+      required: true,
+      minlength: 2,
+      maxlength: 100,
+    },
   },
 });
 

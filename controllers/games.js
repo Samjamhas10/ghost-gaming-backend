@@ -5,7 +5,7 @@ const {
 const Game = require("../models/games");
 const { BadRequestError } = require("../utils/errors");
 
-// base url
+// IGDB API URL endpoint
 const API_URL = "https://api.igdb.com/v4/games";
 
 // helper function
@@ -15,7 +15,7 @@ const checkResponse = (res) => {
   }
   console.error(res);
   res.json().then(console.error);
-  return Promise.reject(`Error: ${res.status}`);
+  return Promise.reject(new Error(`Error: ${res.status}`));
 };
 
 // get recently played games
@@ -29,13 +29,13 @@ const getGames = (req, res, next) => {
     headers: {
       Accept: "application/json",
       "Client-ID": "1wsoeud8986qp5or7yfy7442oggme9",
-      Authorization: req.headers.authorization,
+      Authorization: req.headers.authorization, // expects token from frontend
     },
     body: query,
   })
     .then(checkResponse)
     .then((data) => {
-      res.send(data);
+      res.send(data); // send game data to client
     })
     .catch((err) => {
       console.error(err);
@@ -64,8 +64,8 @@ const searchGames = (req, res, next) => {
     body: query,
   })
     .then(checkResponse)
-    .then((gameTitle) => {
-      res.send(gameTitle);
+    .then((data) => {
+      res.send(data);
     })
     .catch((err) => {
       console.error(err);
@@ -78,16 +78,8 @@ const searchGames = (req, res, next) => {
 // save a new game
 const saveGames = async (req, res, next) => {
   // destructure incoming request body
-  const {
-    name,
-    gameId,
-    summary,
-    releaseDate,
-    genres,
-    platforms,
-    coverImage,
-    rating,
-  } = req.body;
+  const { name, gameId, summary, releaseDate, genres, coverImage, rating } =
+    req.body;
   const owner = req.user._id;
   try {
     const newGame = new Game({
@@ -96,9 +88,9 @@ const saveGames = async (req, res, next) => {
       summary,
       releaseDate,
       genres,
-      platforms,
       coverImage,
       rating,
+      owner,
     });
     const savedGame = await newGame.save();
     res.status(okStatusCode).send(savedGame);
@@ -114,7 +106,7 @@ const saveGames = async (req, res, next) => {
 const savedGames = async (req, res, next) => {
   const userId = req.user._id;
   try {
-    const games = await Game.find({ owner: userId });
+    const games = await Game.find({ owner: userId }); // find games by owner
     res.status(okStatusCode).send(games);
   } catch (err) {
     console.error(err);
@@ -124,9 +116,9 @@ const savedGames = async (req, res, next) => {
   }
 };
 
+// delete specific saved games by gameID
 const deleteGames = async (req, res, next) => {
   const { gameId } = req.params; // identifying which game to delete
-  const userId = req.user._id;
   if (!gameId) {
     return next(new BadRequestError("Invalid game"));
   }
