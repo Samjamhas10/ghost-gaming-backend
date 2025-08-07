@@ -1,3 +1,8 @@
+require("dotenv").config();
+const ACCESS_TOKEN = process.env.ACCESS_TOKEN;
+const CLIENT_ID = process.env.CLIENT_ID;
+const API_URL = process.env.API_URL;
+
 const {
   internalServerStatusCode,
   okStatusCode,
@@ -5,8 +10,9 @@ const {
 const Game = require("../models/games");
 const { BadRequestError } = require("../utils/errors");
 
-// IGDB API URL endpoint
-const API_URL = "https://api.igdb.com/v4/games";
+console.log("URL:", API_URL);
+console.log("Client ID:", CLIENT_ID);
+console.log("Access Token:", ACCESS_TOKEN);
 
 // helper function
 const checkResponse = (res) => {
@@ -28,8 +34,8 @@ const getGames = (req, res, next) => {
     method: "POST",
     headers: {
       Accept: "application/json",
-      "Client-ID": "1wsoeud8986qp5or7yfy7442oggme9",
-      Authorization: req.headers.authorization, // expects token from frontend
+      "Client-ID": process.env.CLIENT_ID,
+      Authorization: `Bearer ${process.env.ACCESS_TOKEN}`,
     },
     body: query,
   })
@@ -58,8 +64,8 @@ const searchGames = (req, res, next) => {
     method: "POST",
     headers: {
       Accept: "application/json",
-      "Client-ID": "1wsoeud8986qp5or7yfy7442oggme9",
-      Authorization: req.headers.authorization,
+      "Client-ID": process.env.CLIENT_ID,
+      Authorization: `Bearer ${process.env.ACCESS_TOKEN}`,
     },
     body: query,
   })

@@ -2,6 +2,7 @@ const express = require("express");
 // const router = require("express").Router();
 const mongoose = require("mongoose");
 const cors = require("cors");
+require("dotenv").config();
 const { errors } = require("celebrate");
 const errorHandler = require("./middlewares/error-handler");
 const { requestLogger, errorLogger } = require("./middlewares/logger");
