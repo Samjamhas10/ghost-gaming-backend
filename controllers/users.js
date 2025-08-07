@@ -72,8 +72,8 @@ const updateProfile = async (req, res, next) => {
     const userData = await User.findByIdAndUpdate(
       userId,
       {
-        username,
-        bio,
+        name: username,
+        bio: "This is a test from the backend",
         avatarUrl,
       },
       { new: true, runValidators: true }
