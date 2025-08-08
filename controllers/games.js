@@ -84,7 +84,7 @@ const searchGames = (req, res, next) => {
 // save a new game
 const saveGames = async (req, res, next) => {
   // destructure incoming request body
-  const { name, gameId, summary, releaseDate, genres, coverImage, rating } =
+  const { name, gameId, summary, releaseDate, coverImage, rating, savedAt } =
     req.body;
   const owner = req.user._id;
   try {
@@ -96,6 +96,7 @@ const saveGames = async (req, res, next) => {
       genres,
       coverImage,
       rating,
+      savedAt,
       owner,
     });
     const savedGame = await newGame.save();

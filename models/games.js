@@ -24,15 +24,6 @@ const gameSchema = new mongoose.Schema({
     type: Date,
   },
 
-  genres: {
-    type: [String],
-    required: true,
-  },
-
-  platforms: {
-    type: [String],
-    required: true,
-  },
 
   coverImage: {
     type: String,

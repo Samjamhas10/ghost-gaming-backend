@@ -73,7 +73,7 @@ const updateProfile = async (req, res, next) => {
       userId,
       {
         name: username,
-        bio: "This is a test from the backend",
+        bio,
         avatarUrl,
       },
       { new: true, runValidators: true }

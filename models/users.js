@@ -30,19 +30,20 @@ const userSchema = new mongoose.Schema({
   },
   avatarUrl: {
     type: String,
-    required: true,
     validate: {
       validator(value) {
         return validator.isURL(value);
       },
       message: "You must enter a valid URL",
     },
-    bio: {
-      type: String,
-      required: true,
-      minlength: 2,
-      maxlength: 100,
-    },
+
+  },
+  bio: {
+    type: String,
+    required: true,
+    minlength: 2,
+    maxlength: 100,
+    default: "Enter your bio",
   },
 });
 
