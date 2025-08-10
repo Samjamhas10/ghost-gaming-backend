@@ -36,11 +36,10 @@ const userSchema = new mongoose.Schema({
       },
       message: "You must enter a valid URL",
     },
-
   },
   bio: {
     type: String,
-    required: true,
+    required: false,
     minlength: 2,
     maxlength: 100,
     default: "Enter your bio",

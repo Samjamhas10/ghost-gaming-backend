@@ -25,6 +25,9 @@ const createUser = async (req, res, next) => {
     });
     return res.status(createdStatusCode).send(user);
   } catch (err) {
+    if (err.name === "ValidationError") {
+      return res.status(400).send({ message: err.message });
+    }
     return next(err);
   }
 };
