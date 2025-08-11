@@ -1,7 +1,6 @@
 require("dotenv").config();
-const ACCESS_TOKEN = process.env.ACCESS_TOKEN;
-const CLIENT_ID = process.env.CLIENT_ID;
-const API_URL = process.env.API_URL;
+
+const { ACCESS_TOKEN, CLIENT_ID, API_URL } = process.env.ACCESS_TOKEN;
 
 const {
   internalServerStatusCode,
@@ -9,10 +8,6 @@ const {
 } = require("../utils/statusCodes");
 const Game = require("../models/games");
 const { BadRequestError } = require("../utils/errors");
-
-console.log("URL:", API_URL);
-console.log("Client ID:", CLIENT_ID);
-console.log("Access Token:", ACCESS_TOKEN);
 
 // helper function
 const checkResponse = (res) => {
@@ -34,8 +29,8 @@ const getGames = (req, res, next) => {
     method: "POST",
     headers: {
       Accept: "application/json",
-      "Client-ID": process.env.CLIENT_ID,
-      Authorization: `Bearer ${process.env.ACCESS_TOKEN}`,
+      "Client-ID": CLIENT_ID,
+      Authorization: `Bearer ${ACCESS_TOKEN}`,
     },
     body: query,
   })
@@ -64,8 +59,8 @@ const searchGames = (req, res, next) => {
     method: "POST",
     headers: {
       Accept: "application/json",
-      "Client-ID": process.env.CLIENT_ID,
-      Authorization: `Bearer ${process.env.ACCESS_TOKEN}`,
+      "Client-ID": CLIENT_ID,
+      Authorization: `Bearer ${ACCESS_TOKEN}`,
     },
     body: query,
   })
@@ -93,7 +88,6 @@ const saveGames = async (req, res, next) => {
       gameId,
       summary,
       releaseDate,
-      genres,
       coverImage,
       rating,
       savedAt,
