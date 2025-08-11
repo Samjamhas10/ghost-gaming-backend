@@ -1,6 +1,6 @@
 require("dotenv").config();
 
-const { ACCESS_TOKEN, CLIENT_ID, API_URL } = process.env.ACCESS_TOKEN;
+const { ACCESS_TOKEN, CLIENT_ID, API_URL } = process.env;
 
 const {
   internalServerStatusCode,
