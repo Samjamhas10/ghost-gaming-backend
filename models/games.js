@@ -2,7 +2,7 @@ const mongoose = require("mongoose");
 const validator = require("validator");
 
 const gameSchema = new mongoose.Schema({
-  name: {
+  username: {
     type: String,
     required: true,
     minlength: 2,
@@ -23,7 +23,6 @@ const gameSchema = new mongoose.Schema({
   releaseDate: {
     type: Date,
   },
-
 
   coverImage: {
     type: String,

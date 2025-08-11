@@ -8,7 +8,7 @@ const { okStatusCode, createdStatusCode } = require("../utils/statusCodes");
 const createUser = async (req, res, next) => {
   try {
     // destructure user input from req.body
-    const { email, password, name, avatarUrl } = req.body;
+    const { email, password, username, avatarUrl } = req.body;
     // check if user with email already exists
     const userExists = await User.findOne({ email }).select("+password");
     if (userExists) {
@@ -20,7 +20,7 @@ const createUser = async (req, res, next) => {
     const user = await User.create({
       email,
       password: hashPassword,
-      name,
+      username,
       avatarUrl,
     });
     return res.status(createdStatusCode).send(user);
@@ -69,13 +69,17 @@ const login = async (req, res, next) => {
 };
 
 const updateProfile = async (req, res, next) => {
+  console.log("🚀 UPDATE PROFILE ENDPOINT HIT!");
+  console.log("📦 REQ.BODY:", req.body);
+  console.log("👤 USER ID:", req.user._id);
   try {
+    console.log("Incoming update data:", req.body);
     const userId = req.user._id;
     const { username, bio, avatarUrl } = req.body;
     const userData = await User.findByIdAndUpdate(
       userId,
       {
-        name: username,
+        username,
         bio,
         avatarUrl,
       },
@@ -83,6 +87,7 @@ const updateProfile = async (req, res, next) => {
     ).select("-password");
     return res.status(okStatusCode).send(userData);
   } catch (err) {
+    console.error("Update failed", err);
     return next(err);
   }
 };

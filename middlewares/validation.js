@@ -27,10 +27,10 @@ const validateUserBody = celebrate({
       "string.max": 'The maximum length of the "password" field is 30',
       "string.empty": 'The "password" field must be filled in',
     }),
-    name: Joi.string().required().min(2).max(30).messages({
-      "string.min": 'The minimum length of the "name" field is 2',
-      "string.max": 'The maximum length of the "name" field is 30',
-      "string.empty": 'The "name" field must be filled in',
+    username: Joi.string().required().min(2).max(30).messages({
+      "string.min": 'The minimum length of the "username" field is 2',
+      "string.max": 'The maximum length of the "username" field is 30',
+      "string.empty": 'The "username" field must be filled in',
     }),
     avatarUrl: Joi.string().required().custom(validateUrl).messages({
       "string.empty": 'The "avatarUrl" field must be a valid URL',

@@ -15,6 +15,7 @@ const userSchema = new mongoose.Schema({
       message: "You have to enter a valid email",
     },
   },
+
   password: {
     type: String,
     required: true,
@@ -22,12 +23,14 @@ const userSchema = new mongoose.Schema({
     maxlength: "30",
     select: false, // password security
   },
-  name: {
+
+  username: {
     type: String,
     required: true,
     minlength: 2,
     maxlength: 30,
   },
+
   avatarUrl: {
     type: String,
     validate: {
