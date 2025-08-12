@@ -70,8 +70,9 @@ const validateUserUpdateProfile = celebrate({
     username: Joi.string().required().min(2).max(30).messages({
       "string.min": 'The minimum length of the "username" field is 2',
     }),
-    bio: Joi.string().required().min(2).max(100).messages({
+    bio: Joi.string().required().min(2).max(200).messages({
       "string.min": 'The minimum length of the "bio" field is 2',
+      "string.max": 'The maximum length of the "bio" field is 200',
     }),
     avatarUrl: Joi.string().required().custom(validateUrl).messages({
       "string.empty": 'The "avatarUrl" field must be a valid URL',
