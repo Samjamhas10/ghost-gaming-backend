@@ -69,11 +69,7 @@ const login = async (req, res, next) => {
 };
 
 const updateProfile = async (req, res, next) => {
-  console.log("🚀 UPDATE PROFILE ENDPOINT HIT!");
-  console.log("📦 REQ.BODY:", req.body);
-  console.log("👤 USER ID:", req.user._id);
   try {
-    console.log("Incoming update data:", req.body);
     const userId = req.user._id;
     const { username, bio, avatarUrl } = req.body;
     const userData = await User.findByIdAndUpdate(
@@ -87,7 +83,6 @@ const updateProfile = async (req, res, next) => {
     ).select("-password");
     return res.status(okStatusCode).send(userData);
   } catch (err) {
-    console.error("Update failed", err);
     return next(err);
   }
 };

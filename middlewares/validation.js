@@ -51,15 +51,16 @@ const validateAuthentication = celebrate({
   }),
 });
 
-const validateGameId = celebrate({
-  params: Joi.object().keys({
-    userId: Joi.string().hex().length(24).required().messages({
-      "string.empty": '"gameId" is required',
-      "string.length": '"gameId" should be 24 characters long',
-      "string.hex": '"gameId" must have a valid hexadecimal string',
-    }),
-  }),
-});
+// TODO: implement this in
+// const validateGameId = celebrate({
+//   params: Joi.object().keys({
+//     userId: Joi.string().hex().length(24).required().messages({
+//       "string.empty": '"userId" is required',
+//       "string.length": '"userId" should be 24 characters long',
+//       "string.hex": '"userId" must have a valid hexadecimal string',
+//     }),
+//   }),
+// });
 
 const validateSaveGame = celebrate({
   body: Joi.object().keys({}),
@@ -83,7 +84,7 @@ const validateUserUpdateProfile = celebrate({
 module.exports = {
   validateUserBody,
   validateAuthentication,
-  validateGameId,
+  // validateGameId, //TODO: implement this
   validateSaveGame,
   validateUserUpdateProfile,
 };

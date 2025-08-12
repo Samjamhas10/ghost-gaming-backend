@@ -8,7 +8,7 @@ const {
   deleteGames,
 } = require("../controllers/games");
 
-const { validateGameId } = require("../middlewares/validation");
+// const { validateGameId } = require("../middlewares/validation");
 
 console.error(getGames);
 router.get("/", getGames);
@@ -18,8 +18,8 @@ router.get("/search", searchGames);
 // auth middleware
 router.use(auth);
 
-router.post("/save", validateGameId, saveGames); // PROTECTED saving games to a user's collection
+router.post("/save", saveGames); // PROTECTED saving games to a user's collection
 router.get("/saved", savedGames); // PROTECTED retrieving a user's saved games
-router.delete("/:gameId", validateGameId, deleteGames); // PROTECTED deleting a user's saved games
+router.delete("/:gameId", deleteGames); // PROTECTED deleting a user's saved games
 
 module.exports = router;
