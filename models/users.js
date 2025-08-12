@@ -19,8 +19,8 @@ const userSchema = new mongoose.Schema({
   password: {
     type: String,
     required: true,
-    minlength: "2",
-    maxlength: "30",
+    minlength: "8",
+    maxlength: "100",
     select: false, // password security
   },
 
@@ -33,6 +33,7 @@ const userSchema = new mongoose.Schema({
 
   avatarUrl: {
     type: String,
+    requuired: true,
     validate: {
       validator(value) {
         return validator.isURL(value);

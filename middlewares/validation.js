@@ -22,9 +22,9 @@ const validateUserBody = celebrate({
     email: Joi.string().required().custom(validateEmail).messages({
       "string.empty": 'The "email" field must be a valid email',
     }),
-    password: Joi.string().required().min(2).max(30).messages({
-      "string.min": 'The minimum length of the "password" field is 2',
-      "string.max": 'The maximum length of the "password" field is 30',
+    password: Joi.string().required().min(8).max(100).messages({
+      "string.min": 'The minimum length of the "password" field is 8',
+      "string.max": 'The maximum length of the "password" field is 100',
       "string.empty": 'The "password" field must be filled in',
     }),
     username: Joi.string().required().min(2).max(30).messages({
@@ -43,9 +43,9 @@ const validateAuthentication = celebrate({
     email: Joi.string().required().custom(validateEmail).messages({
       "string.empty": 'The "email" field must be a valid email',
     }),
-    password: Joi.string().required().min(2).max(30).messages({
-      "string.min": 'The minimum length of the "password" field is 2',
-      "string.max": 'The maximum length of the "password" field is 30',
+    password: Joi.string().required().min(8).max(100).messages({
+      "string.min": 'The minimum length of the "password" field is 8',
+      "string.max": 'The maximum length of the "password" field is 100',
       "string.empty": 'The "password" field must be filled in',
     }),
   }),
