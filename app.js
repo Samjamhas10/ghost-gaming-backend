@@ -23,11 +23,7 @@ mongoose
 app.use(express.json());
 app.use(
   cors({
-    origin: [
-      "https://www.ghost-app.jumpingcrab.com",
-      "https://ghost-app.jumpingcrab.com",
-      "https://api.ghost-app.jumpingcrab.com/",
-    ],
+    origin: ["https://ghost-app.jumpingcrab.com","https://www.ghost-app.jumpingcrab.com" ],
     credentials: true,
   })
 );
