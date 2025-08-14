@@ -33,7 +33,7 @@ const userSchema = new mongoose.Schema({
 
   avatarUrl: {
     type: String,
-    requuired: true,
+    required: true,
     validate: {
       validator(value) {
         return validator.isURL(value);
@@ -45,7 +45,7 @@ const userSchema = new mongoose.Schema({
     type: String,
     required: false,
     minlength: 2,
-    maxlength: 100,
+    maxlength: 300,
     default: "Enter your bio",
   },
 });

@@ -3,6 +3,7 @@ const express = require("express");
 const mongoose = require("mongoose");
 const cors = require("cors");
 require("dotenv").config();
+
 const { errors } = require("celebrate");
 const errorHandler = require("./middlewares/error-handler");
 const { requestLogger, errorLogger } = require("./middlewares/logger");
@@ -20,7 +21,16 @@ mongoose
 
 // middlewares
 app.use(express.json());
-app.use(cors());
+app.use(
+  cors({
+    origin: [
+      "https://www.ghost-app.jumpingcrab.com",
+      "https://ghost-app.jumpingcrab.com",
+      "https://api.ghost-app.jumpingcrab.com/",
+    ],
+    credentials: true,
+  })
+);
 app.use(requestLogger);
 
 // routes

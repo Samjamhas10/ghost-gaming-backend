@@ -10,7 +10,6 @@ const {
 
 // const { validateGameId } = require("../middlewares/validation");
 
-console.error(getGames);
 router.get("/", getGames);
 
 router.get("/search", searchGames);

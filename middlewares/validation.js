@@ -17,6 +17,7 @@ const validateEmail = (value, helpers) => {
   return helpers.error("string.email");
 };
 
+// signup & createUser validation
 const validateUserBody = celebrate({
   body: Joi.object().keys({
     email: Joi.string().required().custom(validateEmail).messages({
@@ -38,6 +39,7 @@ const validateUserBody = celebrate({
   }),
 });
 
+// login validation
 const validateAuthentication = celebrate({
   body: Joi.object().keys({
     email: Joi.string().required().custom(validateEmail).messages({
@@ -66,6 +68,7 @@ const validateSaveGame = celebrate({
   body: Joi.object().keys({}),
 });
 
+// updateProfile validation
 const validateUserUpdateProfile = celebrate({
   body: Joi.object().keys({
     username: Joi.string().required().min(2).max(30).messages({
