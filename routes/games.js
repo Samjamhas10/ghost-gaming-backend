@@ -17,7 +17,7 @@ router.get("/search", searchGames);
 // auth middleware
 router.use(auth);
 
-router.patch("/save", saveGames); // PROTECTED saving games to a user's collection
+router.put("/save", saveGames); // PROTECTED saving games to a user's collection
 router.get("/saved", savedGames); // PROTECTED retrieving a user's saved games
 router.delete("/:gameId", deleteGames); // PROTECTED deleting a user's saved games
 
