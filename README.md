@@ -43,6 +43,9 @@ This is the backend for Ghost Gaming in order to work seemlessly with the Ghost 
 
 ## Live Demo
 
+- Frontend + Backend: https://ghost-app.jumpingcrab.com/
+- API Base URL: https://api.ghost-app.jumpingcrab.com/
+
 ## Deployment Instructions
 
 - To run the backend locally:
