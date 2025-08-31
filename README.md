@@ -40,7 +40,9 @@ This is the backend for Ghost Gaming in order to work seamlessly with the Ghost 
 
 ## Screenshots
 
-- Coming Soon!
+- ## Deployment Site
+
+![Deployment Site Screenshot](deployment-site.png)
 
 ## Live Demo
 
