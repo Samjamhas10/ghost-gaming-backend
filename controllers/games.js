@@ -1,31 +1,32 @@
 require("dotenv").config();
-
+const fetch = require("node-fetch");
 const { ACCESS_TOKEN, CLIENT_ID, API_URL } = process.env;
-
 const {
   internalServerStatusCode,
   okStatusCode,
 } = require("../utils/statusCodes");
-const Game = require("../models/games");
-const { BadRequestError } = require("../utils/errors");
 
-// helper function
+// In-memory store for saved games per user
+const savedGamesStore = {};
+
+// Helper for fetch responses
 const checkResponse = (res) => {
-  if (res.ok) {
-    return res.json();
-  }
+  if (res.ok) return res.json();
   console.error(res);
   res.json().then(console.error);
   return Promise.reject(new Error(`Error: ${res.status}`));
 };
 
-// get recently played games
-const getGames = (req, res, next) => {
+// ---------------------- IGDB Routes ---------------------- //
+
+// Get popular games
+const getGames = (req, res) => {
   const query = `
-  fields name, summary, rating, cover.url, genres.name, platforms.name;
-  where rating > 80 & rating_count > 10;
-  limit 8;`;
-  return fetch(API_URL, {
+    fields name, summary, rating, cover.url, genres.name, platforms.name;
+    where rating > 80 & rating_count > 10;
+    limit 8;
+  `;
+  fetch(API_URL, {
     method: "POST",
     headers: {
       Accept: "application/json",
@@ -36,27 +37,25 @@ const getGames = (req, res, next) => {
     body: query,
   })
     .then(checkResponse)
-    .then((data) => {
-      res.send(data); // send game data to client
-    })
+    .then((data) => res.send(data))
     .catch((err) => {
       console.error(err);
-      return res
+      res
         .status(internalServerStatusCode)
         .send({ message: "Internal server error" });
     });
 };
 
-// search all games
-const searchGames = (req, res, next) => {
+// Search games
+const searchGames = (req, res) => {
   const { gameTitle } = req.query;
   const query = `
-  fields name, summary, rating, cover.url, genres.name, platforms.name;
-  search "${gameTitle}";
-  where rating != null;
-  limit 15;
-`;
-  return fetch(API_URL, {
+    fields name, summary, rating, cover.url, genres.name, platforms.name;
+    search "${gameTitle}";
+    where rating != null;
+    limit 15;
+  `;
+  fetch(API_URL, {
     method: "POST",
     headers: {
       Accept: "application/json",
@@ -66,9 +65,7 @@ const searchGames = (req, res, next) => {
     body: query,
   })
     .then(checkResponse)
-    .then((data) => {
-      res.send(data);
-    })
+    .then((data) => res.send(data))
     .catch((err) => {
       console.error(err);
       res
@@ -77,75 +74,44 @@ const searchGames = (req, res, next) => {
     });
 };
 
-// save a new game
-const saveGames = async (req, res, next) => {
-  // destructure incoming request body
-  const {
-    username,
-    gameId,
-    summary,
-    releaseDate,
-    coverImage,
-    rating,
-    savedAt,
-  } = req.body;
-  const owner = req.user._id;
-  try {
-    const newGame = new Game({
-      username,
-      gameId,
-      summary,
-      releaseDate,
-      coverImage,
-      rating,
-      savedAt,
-      owner,
-    });
-    const savedGame = await newGame.save();
-    res.status(okStatusCode).send(savedGame);
-  } catch (err) {
-    console.error(err);
-    res
-      .status(internalServerStatusCode)
-      .send({ message: "Internal server error" });
+// ---------------------- Saved Games (In-Memory) ---------------------- //
+
+// Save a new game for a user
+const saveGames = (req, res) => {
+  const username = req.user.username || "guest"; // fallback if no JWT
+  const { gameId } = req.body;
+
+  if (!savedGamesStore[username]) savedGamesStore[username] = [];
+  if (!savedGamesStore[username].includes(gameId)) {
+    savedGamesStore[username].push(gameId);
   }
+
+  res
+    .status(okStatusCode)
+    .send({ message: "Game saved", games: savedGamesStore[username] });
 };
 
-// users saved games
-const savedGames = async (req, res, next) => {
-  const userId = req.user._id;
-  try {
-    const games = await Game.find({ owner: userId }); // find games by owner
-    res.status(okStatusCode).send(games);
-  } catch (err) {
-    console.error(err);
-    res
-      .status(internalServerStatusCode)
-      .send({ message: "Internal server error" });
-  }
+// Get saved games for a user
+const savedGames = (req, res) => {
+  const username = req.user.username || "guest";
+  res.status(okStatusCode).send(savedGamesStore[username] || []);
 };
 
-// delete specific saved games by gameID
-const deleteGames = async (req, res, next) => {
-  const { gameId } = req.params; // identifying which game to delete
-  if (!gameId) {
-    return next(new BadRequestError("Invalid game"));
+// Delete a saved game
+const deleteGames = (req, res) => {
+  const username = req.user.username || "guest";
+  const { gameId } = req.params;
+
+  if (!savedGamesStore[username]) {
+    return res.status(404).send({ message: "No saved games" });
   }
-  try {
-    const deletedGame = await Game.findOneAndDelete({
-      gameId: req.params.gameId,
-      owner: req.user._id,
-    });
-    if (!deletedGame) {
-      return res.status(404).send({ message: "Deleted game not found" });
-    }
-    return res.status(okStatusCode).send(deletedGame);
-  } catch (err) {
-    console.error(err);
-    return res
-      .status(internalServerStatusCode)
-      .send({ message: "Internal server error" });
-  }
+
+  savedGamesStore[username] = savedGamesStore[username].filter(
+    (id) => id !== gameId
+  );
+  res
+    .status(okStatusCode)
+    .send({ message: "Deleted", games: savedGamesStore[username] });
 };
 
 module.exports = { getGames, searchGames, saveGames, savedGames, deleteGames };
